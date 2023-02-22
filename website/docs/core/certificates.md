@@ -26,7 +26,20 @@ To use externally managed certificates, for example generated with certbot or Ha
 
 The docker-compose installation maps a `certs` directory to `/certs`, you can simply use this as an output directory for certbot.
 
-For Kubernetes, you can map custom secrets/volumes under `/certs`.
+For Kubernetes, you can map custom secrets/volumes under `/certs`, for example with:
+
+```
+volumeMounts:
+  - name: secret-volume
+    mountPath: /certs
+
+volumes:
+- name: secret-volume
+  secret:
+    secretName: authentik-sso-certificate-secret
+```
+
+Which will allow Authentik to auto-discover the `tls.crt` and `tls.key` file when using a standard K8S TLS secret type.
 
 You can also bind mount single files into the folder, as long as they fall under this naming schema.
 
